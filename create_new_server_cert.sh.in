@@ -1,0 +1,46 @@
+#!/bin/bash
+#
+# Scripts to create a new server certificate
+#   arg1 - fully qualified host namel
+#
+
+# Get the dirname of this script so we can specify full paths for the keys and certs
+BASE_DIR=@CERT_ROOT_DIR@
+
+# Set up the filenames
+PRIVATE_KEY_FILE=${BASE_DIR}/intermediate/private/${1}.key.pem
+CSR_FILE=${BASE_DIR}/intermediate/csr/${1}.csr.pem
+CERT_FILE=${BASE_DIR}/intermediate/certs/${1}.cert.pem
+INTERMEDIATE_PASS_FILE=${BASE_DIR}/intermediate/private/pass
+SSL_CONF=${BASE_DIR}/intermediate/openssl.cnf
+SUBJECT='/C=@CERT_COUNTRY@/ST=@CERT_STATE@/L=@CERT_LOCALITY@/organizationName=@CERT_ORG@/OU=@CERT_ORG_UNIT@/CN='${1}
+
+# Create the private key
+echo
+echo "Creating private key: ${PRIVATE_KEY_FILE}"
+echo
+openssl genrsa -out ${PRIVATE_KEY_FILE} 2048
+chmod 400 ${PRIVATE_KEY_FILE}
+
+# Create the Certificate signing request
+echo
+echo "Creating CSR with subject: ${SUBJECT}"
+echo
+openssl req -config ${SSL_CONF} \
+      -subj "${SUBJECT}" \
+      -key ${PRIVATE_KEY_FILE} \
+      -new -sha256 -out ${CSR_FILE}
+
+# Signing the certificate request
+echo
+echo "Creating certificate: ${CERT_FILE}"
+echo
+openssl ca -config ${SSL_CONF} \
+      -extensions server_cert -days 1835 -notext -md sha256 \
+      -passin file:${INTERMEDIATE_PASS_FILE} -batch \
+      -in ${CSR_FILE} \
+      -out ${CERT_FILE}
+chmod 444 ${CERT_FILE}      
+
+echo
+echo "Created new certificate: ${CERT_FILE}"
