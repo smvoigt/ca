@@ -10,14 +10,15 @@ Bootstrap autotools to create the configure script
 ```
 ## Configure the project
 Configure options:
+
 |option           |default |     |
 |-----------------|--------|-----|
-|--cert_country   |AU            |default cert country|
-|--cert_state     |State         |default cert state|
-|--cert_locality  |Locality      |default cert locality|
-|--cert_org       |Org           |default cert org|
-|--cert_org_unit  |Org Unit      |default cert org_unit|
-|--with-carootdir |$sysconfdir/ca|ca root directory|
+| --cert_country   |AU            |default cert country|
+| --cert_state     |State         |default cert state|
+| --cert_locality  |Locality      |default cert locality|
+| --cert_org       |Org           |default cert org|
+| --cert_org_unit  |Org Unit      |default cert org_unit|
+| --with-carootdir |$sysconfdir/ca|ca root directory|
 
 ## Install
 
