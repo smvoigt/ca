@@ -33,34 +33,34 @@ DEFAULT_CERT_LOCALITY="Locality"
 DEFAULT_CERT_ORG="Org"
 DEFAULT_CERT_ORG_UNIT="Org Unit"
 
-AC_ARG_WITH([cert_country],
-	    [AS_HELP_STRING([--cert_country=country],
+AC_ARG_WITH([country],
+	    [AS_HELP_STRING([--with-country=country],
 			    [specify default cert country ])],
-	    [CERT_COUNTRY="$with_cert_country"], 
+	    [CERT_COUNTRY="$with_country"], 
 	    [CERT_COUNTRY="$DEFAULT_CERT_COUNTRY"])
 
-AC_ARG_WITH([cert_state],
-	    [AS_HELP_STRING([--cert_state=state],
+AC_ARG_WITH([state],
+	    [AS_HELP_STRING([--with-state=state],
 			    [specify default cert state ])],
-	    [CERT_STATE="$with_cert_state"], 
+	    [CERT_STATE="$with_state"], 
 	    [CERT_STATE="$DEFAULT_CERT_STATE"])
 
-AC_ARG_WITH([cert_locality],
-	    [AS_HELP_STRING([--cert_locality=locality],
+AC_ARG_WITH([locality],
+	    [AS_HELP_STRING([--with-locality=locality],
 			    [specify default cert locality ])],
-	    [CERT_LOCALITY="$with_cert_locality"], 
+	    [CERT_LOCALITY="$with_locality"], 
 	    [CERT_LOCALITY="$DEFAULT_CERT_LOCALITY"])
 
-AC_ARG_WITH([cert_org],
-	    [AS_HELP_STRING([--cert_org=org],
+AC_ARG_WITH([org],
+	    [AS_HELP_STRING([--with-org=org],
 			    [specify default cert org ])],
-	    [CERT_ORG="$with_cert_org"], 
+	    [CERT_ORG="$with_org"], 
 	    [CERT_ORG="$DEFAULT_CERT_ORG"])  
 
-AC_ARG_WITH([cert_org_unit],
-	    [AS_HELP_STRING([--cert_org_unit=org_unit],
-			    [specify default cert org_unit ])],
-	    [CERT_ORG_UNIT="$with_cert_org_unit"], 
+AC_ARG_WITH([orgunit],
+	    [AS_HELP_STRING([--with-orgunit=orgunit],
+			    [specify default cert org unit ])],
+	    [CERT_ORG_UNIT="$with_org_unit"], 
 	    [CERT_ORG_UNIT="$DEFAULT_CERT_ORG_UNIT"])      
 
 AC_SUBST(CERT_COUNTRY)
