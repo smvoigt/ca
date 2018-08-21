@@ -14,7 +14,20 @@ CERT_FILE=${BASE_DIR}/intermediate/certs/${1}.cert.pem
 INTERMEDIATE_PASS_FILE=${BASE_DIR}/intermediate/private/pass
 SSL_CONF=${BASE_DIR}/intermediate/openssl.cnf
 SUBJECT='/C=@CERT_COUNTRY@/ST=@CERT_STATE@/L=@CERT_LOCALITY@/organizationName=@CERT_ORG@/OU=@CERT_ORG_UNIT@/CN='${1}
+
+# First check to see if the file exists
+if [ -f ${PRIVATE_KEY_FILE} ] ; then
+  echo "Private key file already exists. Exiting."
+  exit 0
+fi
+
+# When run inside CORE, this is undefined anbd causes issues signing the certificate
+export RANDFILE=${BASE_DIR}/intermediate/private/.rand
+
+# use flock to prevent multiple incarnations of this script trying run at the same time
 LOCK_FILE=@CERT_ROOT_DIR@/.lock
+exec 8>$LOCK_FILE
+flock -w 20 8
 
 # Create the private key
 echo
@@ -36,10 +49,7 @@ openssl req -config ${SSL_CONF} \
 echo
 echo "Creating certificate: ${CERT_FILE}"
 echo
-# use flock to prevent multiple incarnations of this script trying to do this at the same time
-# from https://jdimpson.livejournal.com/5685.html
-exec 8>$LOCK_FILE;
-flock -n 8 -w 20
+
 openssl ca -config ${SSL_CONF} \
       -extensions server_cert -days 1835 -notext -md sha256 \
       -passin file:${INTERMEDIATE_PASS_FILE} -batch \
@@ -49,3 +59,5 @@ chmod 444 ${CERT_FILE}
 
 echo
 echo "Created new certificate: ${CERT_FILE}"
+
+flock -u 8

@@ -40,6 +40,7 @@ install-data-local:
 	echo 1000 > $(DESTDIR)$(carootdir)/root/serial
 	chmod 700 $(DESTDIR)$(carootdir)/intermediate/private
 	touch $(DESTDIR)$(carootdir)/intermediate/index.txt
+	touch $(DESTDIR)$(carootdir)/intermediate/private/.rand
 	echo 1000 > $(DESTDIR)$(carootdir)/intermediate/serial
 	echo 1000 > $(DESTDIR)$(carootdir)/intermediate/crlnumber
 	cp -apv root/openssl.cnf $(ROOT_SSL_CONF)
