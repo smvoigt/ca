@@ -14,6 +14,7 @@ CERT_FILE=${BASE_DIR}/intermediate/certs/${1}.cert.pem
 INTERMEDIATE_PASS_FILE=${BASE_DIR}/intermediate/private/pass
 SSL_CONF=${BASE_DIR}/intermediate/openssl.cnf
 SUBJECT='/C=@CERT_COUNTRY@/ST=@CERT_STATE@/L=@CERT_LOCALITY@/organizationName=@CERT_ORG@/OU=@CERT_ORG_UNIT@/CN='${1}
+LOCK_FILE=@CERT_ROOT_DIR@/.lock
 
 # Create the private key
 echo
@@ -35,6 +36,10 @@ openssl req -config ${SSL_CONF} \
 echo
 echo "Creating certificate: ${CERT_FILE}"
 echo
+# use flock to prevent multiple incarnations of this script trying to do this at the same time
+# from https://jdimpson.livejournal.com/5685.html
+exec 8>$LOCK_FILE;
+flock -n 8 -w 20
 openssl ca -config ${SSL_CONF} \
       -extensions server_cert -days 1835 -notext -md sha256 \
       -passin file:${INTERMEDIATE_PASS_FILE} -batch \
